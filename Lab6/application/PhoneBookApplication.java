@@ -19,7 +19,7 @@ public class PhoneBookApplication extends Application{
 	private PhoneBook phoneBook;
 	private NameListView nameListView;
 	private Dialogs dialoger;
-	private PhoneBook myObject;
+	private PhoneBook gamlakatalogen;
 	private File file;
 
 	/**
@@ -43,12 +43,12 @@ public class PhoneBookApplication extends Application{
 		phoneBook = new MapPhoneBook();
 		dialoger = new Dialogs();
 		
-		
-		boolean start = dialoger.confirmDialog("Startup", "blabla", "Vill du starta programet?");
-		
-		if (!start){
-			System.exit(1);
-		}
+//		
+//		boolean start = dialoger.confirmDialog("Startup", "blabla", "Vill du starta programet?");
+//		
+//		if (!start){
+//			System.exit(1);
+//		}
 		
 		boolean load = dialoger.confirmDialog("Ladda befintlig telefonkatalog", "blabla", "Vill du ladda in en befintlig telefonkatalog?");
 		
@@ -57,30 +57,26 @@ public class PhoneBookApplication extends Application{
 		}
 		// set default locale english 
 		Locale.setDefault(Locale.ENGLISH);
-		
-		
 
-		if (load)
-			nameListView = new NameListView(myObject);
-		else if (!load)
-			nameListView = new NameListView(phoneBook);
-		
-		
+
+
+		nameListView = new NameListView(phoneBook);
+
+
 		BorderPane root = new BorderPane();
 
-		
-		
-		if (load)
-			root.setTop(new PhoneBookMenu(myObject, nameListView));
-		else if (!load)
-			root.setTop(new PhoneBookMenu(phoneBook, nameListView));
+
+
+
+		root.setTop(new PhoneBookMenu(phoneBook, nameListView));
 
 		root.setCenter(nameListView);
-		
+
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("PhoneBook");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+
 		
 	}
 
@@ -98,7 +94,7 @@ public class PhoneBookApplication extends Application{
 		
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
-			myObject = (PhoneBook) in.readObject();
+			phoneBook = (PhoneBook) in.readObject();
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,8 +122,7 @@ public class PhoneBookApplication extends Application{
 				
 				try {
 					ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-					PhoneBook eee = new MapPhoneBook();
-					out.writeObject(eee);
+					out.writeObject(phoneBook);
 					out.close();
 					} catch (Exception e) {
 					e.printStackTrace();
