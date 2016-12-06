@@ -3,6 +3,7 @@ package application;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
@@ -97,10 +98,11 @@ public class PhoneBookMenu extends MenuBar {
 				nameListView.clearSelection();
 
 			}
-			
+
 			else {
 				dia.alert("Error", "Error", "Could not find any names with the number " + number);
 			}
+
 		}
 	}
 
@@ -111,12 +113,40 @@ public class PhoneBookMenu extends MenuBar {
 		if (res.isPresent()) {
 			String name = res.get();
 			MapPhoneBook temp = new MapPhoneBook();
-
-			Set<String> namn = phoneBook.findNames(number);
-
+			
+			Set<String> namn = new TreeSet<String>(phoneBook.names()).subSet(name, name + Character.MAX_VALUE);
+			
 			if (namn.size()!=0){
+				Iterator itr = namn.iterator();
+				while (itr.hasNext()) {
+					
+					String tempnamn = itr.next().toString();
+
+					Set<String> tempnummer = phoneBook.findNumbers(tempnamn);
+
+					Iterator itr2 = tempnummer.iterator();
+					while (itr2.hasNext()) {
+
+						temp.put(tempnamn, itr2.next().toString());
+					}
+				}
+
+				nameListView.fillList(temp.names());
+				nameListView.clearSelection();
+
+			}
+
+			else {
+				dia.alert("Error", "Error", "Could not find any names with the keyword " + name + " in it");
+			}
+			
+			
+			
+			
+			
+			
+
+		}
 	}
-
-
 
 }
