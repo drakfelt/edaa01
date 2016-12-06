@@ -21,6 +21,8 @@ public class NameListView extends BorderPane {
 	private ObservableList<String> obsList;
 	private PhoneBook phoneBook;
 	private Button addNumberButton;
+	private Button removeButton;
+	private Button removeNumberButton;
 	private Label numbersLabel;
 	
 	/** Creates the list view for the names.Also creates buttons for adding/removing names/numbers.
@@ -47,13 +49,19 @@ public class NameListView extends BorderPane {
 		Button addButton = new Button("Add");
 		addButton.setOnAction(e -> add());
 		
-		addNumberButton = new Button("Add number");
+		removeButton = new Button("Remove Contact");
+		removeButton.setOnAction(e -> remove());
+		
+		removeNumberButton = new Button("Remove Number");
+		removeNumberButton.setOnAction(e -> removenbr());
+		
+		addNumberButton = new Button("Add Number");
 		addNumberButton.setOnAction(e -> addNumber());
 		
 		HBox buttonBox = new HBox();
 		buttonBox.setSpacing(5);
 		buttonBox.setPadding(new Insets(10, 10, 10, 10));
-		buttonBox.getChildren().addAll(numbersLabel, addButton, addNumberButton);
+		buttonBox.getChildren().addAll(numbersLabel, addButton, addNumberButton, removeButton, removeNumberButton);
 		setBottom(buttonBox);
 
 		// The method change is called when a row in the list view is selected. 
@@ -144,6 +152,52 @@ public class NameListView extends BorderPane {
 					select(index);
 				} else {
 					Dialogs.alert("Add", null, "Failed to add phone number.");
+				}
+			}	
+		}	
+	}
+	
+	private void remove() {
+		int index = listView.getSelectionModel().getSelectedIndex();
+		if (index != -1) {
+			String name = obsList.get(index);
+			boolean result = Dialogs.confirmDialog("Remove", "asd", "Do you want to remove " + name);
+			
+				if(result){
+					phoneBook.remove(name);
+					select(index);
+					fillList(phoneBook.names());
+				}
+				
+				else{
+//					inget
+				}
+
+
+			}	
+
+		}	
+	
+	
+	private void removenbr() {
+		int index = listView.getSelectionModel().getSelectedIndex();
+		if (index != -1) {
+			String name = obsList.get(index);
+			Optional<String> result = Dialogs.oneInputDialog("Remove phone number from " + name, "Enter the number to remove", "Number" );
+			if (result.isPresent()) {
+				String input = result.get();
+				boolean success = phoneBook.removeNumber(name, input);
+				
+				if(success) {
+					
+					if (phoneBook.findNumbers(name).size()==0){
+						phoneBook.remove(name);
+					}
+					
+					select(index);
+					fillList(phoneBook.names());
+				} else {
+					Dialogs.alert("Add", null, "Failed to remove phone number.");
 				}
 			}	
 		}	
