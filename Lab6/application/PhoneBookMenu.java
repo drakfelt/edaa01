@@ -61,7 +61,7 @@ public class PhoneBookMenu extends MenuBar {
 
 			Set<String> nummer = phoneBook.findNumbers(name);
 
-			if (nummer!=null){
+			if (nummer.size()!=0){
 				Iterator itr = nummer.iterator();
 				while (itr.hasNext()) {
 					temp.put(name, itr.next().toString());
@@ -72,7 +72,7 @@ public class PhoneBookMenu extends MenuBar {
 			}
 			
 			else {
-				dia.alert("Error", "asd", "Could not find any numbers with the name " + name);
+				dia.alert("Error", "Error", "Could not find any numbers with the name " + name);
 			}
 		}
 
@@ -87,7 +87,7 @@ public class PhoneBookMenu extends MenuBar {
 
 			Set<String> namn = phoneBook.findNames(number);
 
-			if (namn!=null){
+			if (namn.size()!=0){
 				Iterator itr = namn.iterator();
 				while (itr.hasNext()) {
 					temp.put(itr.next().toString(), number);
@@ -99,15 +99,22 @@ public class PhoneBookMenu extends MenuBar {
 			}
 			
 			else {
-				dia.alert("Error", "asd", "Could not find any names with the number " + number);
+				dia.alert("Error", "Error", "Could not find any names with the number " + number);
 			}
 		}
 	}
 
 
 	private void FindPers() {
-		nameListView.fillList(phoneBook.names());
-		nameListView.clearSelection();
+		Optional<String> res = dia.oneInputDialog("Find part of name", "asd", "Keyword:");
+
+		if (res.isPresent()) {
+			String name = res.get();
+			MapPhoneBook temp = new MapPhoneBook();
+
+			Set<String> namn = phoneBook.findNames(number);
+
+			if (namn.size()!=0){
 	}
 
 
