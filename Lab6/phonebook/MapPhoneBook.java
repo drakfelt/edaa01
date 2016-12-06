@@ -65,12 +65,16 @@ public class MapPhoneBook implements PhoneBook, Serializable{
 	@Override
 	public Set<String> findNumbers(String name) {
 		
-		//det går inte att göra size på null så därför returnar jag en tom ny set istället
+		HashSet<String> temp = new HashSet<String>();
+		
+		//det gï¿½r inte att gï¿½ra size pï¿½ null sï¿½ dï¿½rfï¿½r returnar jag en tom ny set istï¿½llet
 		if (phoneBook.get(name)==null){
-			return new HashSet<String>();
+			return temp;
 		}
 		
-		return phoneBook.get(name);
+		temp.addAll(phoneBook.get(name));
+		
+		return temp;
 	}
 
 	@Override
